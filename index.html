@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Concordância Verbal - Romantismo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sepia-bg: #f4ecd8;
+            --sepia-dark: #5d4037;
+            --romantic-red: #8d2323;
+            --parchment: #fdf5e6;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background-color: var(--sepia-bg);
+            color: var(--sepia-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--romantic-red);
+        }
+
+        .card {
+            background: var(--parchment);
+            border: 2px solid #d7ccc8;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid #d7ccc8;
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
+        .btn-romantic {
+            background-color: var(--romantic-red);
+            color: white;
+            transition: all 0.3s;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .btn-romantic:hover {
+            background-color: #5a1212;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(141, 35, 35, 0.3);
+        }
+
+        .hidden { display: none; }
+
+        .drop-zone {
+            min-height: 50px;
+            border: 2px dashed #bcaaa4;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            margin: 0 10px;
+            vertical-align: middle;
+            background: #efebe9;
+        }
+
+        .draggable {
+            cursor: move;
+            background: var(--romantic-red);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .text-box {
+            background: white;
+            border: 1px solid #d7ccc8;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Capa específica */
+        .cover-title {
+            font-size: 4rem;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .ornament {
+            width: 100px;
+            height: 2px;
+            background: var(--romantic-red);
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .ornament::after {
+            content: "❦";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--parchment);
+            padding: 0 10px;
+            color: var(--romantic-red);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="game-container" class="max-w-4xl w-full">
+        
+        <!-- TELA 0: CAPA -->
+        <div id="screen-0" class="card p-12 text-center animate-fade-in">
+            <div class="mb-6 opacity-80">
+                <svg class="mx-auto w-24 h-24 text-red-900" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.5,1.5C14.57,1.5 13,3.07 13,5C13,6.93 14.57,8.5 16.5,8.5C18.43,8.5 20,6.93 20,5C20,3.07 18.43,1.5 16.5,1.5M16.5,6.5C15.67,6.5 15,5.83 15,5C15,4.17 15.67,3.5 16.5,3.5C17.33,3.5 18,4.17 18,5C18,5.83 17.33,6.5 16.5,6.5M10.29,14H4V12H10.29C10.74,10.83 11.89,10 13.25,10C14.28,10 15.18,10.47 15.76,11.21L14.41,12.56C14.12,12.22 13.71,12 13.25,12C12.56,12 12,12.56 12,13.25C12,13.94 12.56,14.5 13.25,14.5C13.71,14.5 14.12,14.28 14.41,13.94L15.76,15.29C15.18,16.03 14.28,16.5 13.25,16.5C11.89,16.5 10.74,15.67 10.29,14.5M21,12.41L19.59,11L14.67,15.92L14.33,15.58L12.92,17L14.67,18.75L21,12.41M4,14V16H10V14H4M4,18V20H10V18H4Z"/>
+                </svg>
+            </div>
+            <h1 class="cover-title italic font-black mb-4">Concordância Verbal</h1>
+            <div class="ornament"></div>
+            <p class="text-xl mb-12 italic text-gray-700">A Harmonia da Pena: Um mergulho gramatical pela estética do Romantismo</p>
+            <div class="space-y-4">
+                <button onclick="nextScreen(1)" class="btn-romantic px-12 py-5 text-xl shadow-xl">Entrar na Jornada</button>
+                <p class="text-sm uppercase tracking-widest text-gray-500 mt-6">Simulador Pedagógico Literário</p>
+            </div>
+        </div>
+
+        <!-- TELA 1: CONCEITO -->
+        <div id="screen-1" class="card p-8 hidden">
+            <h1 class="text-3xl font-bold mb-6 text-center italic">I. A Harmonia da Frase: Concordância Verbal</h1>
+            <div class="space-y-4 text-lg leading-relaxed">
+                <p>De acordo com a <strong>gramática normativa</strong>, a concordância verbal é o mecanismo pelo qual o verbo se flexiona para ajustar-se ao seu sujeito em número (singular ou plural) e pessoa (1ª, 2ª ou 3ª).</p>
+                <div class="bg-white p-4 border-l-4 border-red-800 italic shadow-sm">
+                    <p>"A natureza <strong>parece</strong> chorar com o poeta." (A natureza = 3ª pessoa do singular)</p>
+                    <p>"<strong>Fogem</strong> as nuvens no horizonte." (As nuvens = 3ª pessoa do plural)</p>
+                </div>
+                <p>No Romantismo, a expressão dos sentimentos exige uma linguagem precisa e harmoniosa. Lembre-se: verbos como <strong>haver</strong> (sentido de existir) e <strong>fazer</strong> (tempo decorrido) são impessoais e permanecem no singular.</p>
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen(2)" class="btn-romantic px-6 py-3 shadow-lg">Iniciar Desafio das Obras</button>
+            </div>
+        </div>
+
+        <!-- TELA 2: MÚLTIPLA ESCOLHA -->
+        <div id="screen-2" class="card p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6 italic border-b pb-2">II. O Eco das Obras: Identifique a Concordância</h2>
+            <div id="quiz-q2-content" class="min-h-[300px]"></div>
+            <div id="feedback-2" class="mt-4 p-4 rounded hidden"></div>
+            <div class="mt-8 flex justify-between items-center border-t pt-4">
+                <span id="q2-counter" class="italic text-sm text-gray-600 font-bold">Questão 1 de 5</span>
+                <button id="btn-action-q2" onclick="handleQ2Action()" class="btn-romantic px-8 py-3">Verificar</button>
+            </div>
+        </div>
+
+        <!-- TELA 3: ANALISE DE CASOS -->
+        <div id="screen-3" class="card p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6 italic text-center border-b pb-2">III. Semiótica Literária: Análise de Enunciados</h2>
+            <div id="meme-quiz-container" class="min-h-[400px]"></div>
+            <div id="feedback-3" class="mt-4 p-4 rounded hidden text-center font-bold"></div>
+            <div class="mt-8 flex justify-between items-center border-t pt-4">
+                <span id="meme-counter" class="italic text-sm text-gray-600 font-bold">Análise 1 de 3</span>
+                <button id="btn-action-q3" onclick="handleMemeAction()" class="btn-romantic px-8 py-3">Analisar</button>
+            </div>
+        </div>
+
+        <!-- TELA 4: DRAG AND DROP -->
+        <div id="screen-4" class="card p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6 italic text-center border-b pb-2">IV. Recapitulação: Arraste a Verdade</h2>
+            <p class="mb-8 text-center text-lg">Complete a estrofe romântica arrastando o verbo correto:</p>
+            <div class="text-2xl leading-loose text-center mb-8 bg-white p-8 rounded border shadow-inner">
+                "Nem os mares, nem o céu <div id="dropzone" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">...</div> a imensidão do meu sofrer."
+            </div>
+            <div class="flex justify-center space-x-6">
+                <div id="opt1" class="draggable text-lg shadow-md" draggable="true" ondragstart="drag(event)">contém</div>
+                <div id="opt2" class="draggable text-lg shadow-md" draggable="true" ondragstart="drag(event)">contêm</div>
+                <div id="opt3" class="draggable text-lg shadow-md" draggable="true" ondragstart="drag(event)">continha</div>
+            </div>
+            <div id="feedback-4" class="mt-8 text-center font-bold p-4 rounded hidden"></div>
+            <div class="mt-8 flex justify-between">
+                <button onclick="nextScreen(3)" class="text-gray-600 underline hover:text-red-800 transition font-bold">Voltar</button>
+                <button onclick="checkDrag()" class="btn-romantic px-10 py-3">Concluir</button>
+            </div>
+        </div>
+
+        <!-- TELA 5: PARABÉNS -->
+        <div id="screen-5" class="card p-12 hidden text-center bg-[#fffcf5]">
+            <div class="mb-10">
+                <h2 class="text-4xl font-bold italic mb-6">"Estimado Estudante,"</h2>
+            </div>
+            <div class="italic text-2xl leading-relaxed text-gray-800 max-w-2xl mx-auto border-l-4 border-red-800 pl-6 text-left mb-10">
+                <p>"A gramática é, em grande parte, a alma da clareza. Vejo que dominaste os preceitos da concordância com a maestria de quem compreende a harmonia das letras."</p>
+                <p class="mt-6">"Aceite os meus mais sinceros parabéns por esta jornada pedagógica. Que a tua pena jamais titubeie diante das regras do nosso belo idioma!"</p>
+            </div>
+            <p class="mt-8 text-xl font-bold">— Joaquim Maria Machado de Assis</p>
+            <button onclick="location.reload()" class="mt-12 btn-romantic px-12 py-4 text-xl">Reiniciar Jornada</button>
+        </div>
+
+    </div>
+
+    <script>
+        const questionsQ2 = [
+            {
+                text: "No 'Noite na Taverna' de Álvares de Azevedo, qual construção respeita a norma culta?",
+                options: [
+                    { label: "Haviam muitos vultos na névoa daquela noite.", value: "a" },
+                    { label: "Faziam anos que eu não via tanta escuridão.", value: "b" },
+                    { label: "Havia muitos vultos na névoa daquela noite.", value: "c" }
+                ],
+                correct: "c",
+                explanation: "O verbo 'haver' (sentido de existir) é impessoal: não vai para o plural."
+            },
+            {
+                text: "Em 'Iracema', de José de Alencar, como ficaria a concordância do sujeito posposto?",
+                options: [
+                    { label: "Mergulhou no mar as lágrimas da virgem.", value: "a" },
+                    { label: "Mergulharam no mar as lágrimas da virgem.", value: "b" },
+                    { label: "Mergulharam-se no mar a lágrima da virgem.", value: "c" }
+                ],
+                correct: "b",
+                explanation: "O sujeito 'as lágrimas' está no plural, logo o verbo deve estar no plural."
+            },
+            {
+                text: "Sobre a passagem do tempo em Casimiro de Abreu, identifique a correta:",
+                options: [
+                    { label: "Já faz duas primaveras que te espero.", value: "a" },
+                    { label: "Já fazem duas primaveras que te espero.", value: "b" },
+                    { label: "Faziam duas primaveras de saudade.", value: "c" }
+                ],
+                correct: "a",
+                explanation: "O verbo 'fazer' indicando tempo decorrido não se flexiona no plural."
+            },
+            {
+                text: "Se Castro Alves descrevesse a liberdade, qual estaria correta?",
+                options: [
+                    { label: "Devem existir mil vozes no oceano.", value: "a" },
+                    { label: "Deve existir mil vozes no oceano.", value: "b" },
+                    { label: "Devem haver mil vozes no oceano.", value: "c" }
+                ],
+                correct: "a",
+                explanation: "O verbo 'existir' não é impessoal. Na locução, o auxiliar 'devem' concorda com 'mil vozes'."
+            },
+            {
+                text: "Em um diálogo romântico, qual concordância de sujeito composto é válida?",
+                options: [
+                    { label: "A lua e as estrelas brilhava para nós.", value: "a" },
+                    { label: "Brilhava a lua e as estrelas para nós.", value: "b" },
+                    { label: "Brilhava o sol e o calor para nós.", value: "c" }
+                ],
+                correct: "b",
+                explanation: "Com sujeito composto posposto, o verbo pode concordar com o núcleo mais próximo (singular)."
+            }
+        ];
+
+        const casesQ3 = [
+            {
+                text: "Analise o enunciado: 'Mais de um poeta chorou suas mágoas.' A concordância está correta por quê?",
+                options: [
+                    { label: "Pois com 'mais de um', o verbo fica no singular.", value: "a" },
+                    { label: "Pois 'poeta' é o núcleo do sujeito simples.", value: "b" },
+                    { label: "Pois o verbo é impessoal nesta construção.", value: "c" }
+                ],
+                correct: "a",
+                explanation: "A expressão 'mais de um' exige o verbo no singular."
+            },
+            {
+                text: "Considere a frase: 'Vende-se ilusões e sonhos.' Por que esta frase apresenta um erro?",
+                options: [
+                    { label: "Pois o sujeito é indeterminado.", value: "a" },
+                    { label: "Pois o verbo deveria concordar com o sujeito paciente (ilusões e sonhos).", value: "b" },
+                    { label: "Pois o 'se' é índice de indeterminação do sujeito.", value: "c" }
+                ],
+                correct: "b",
+                explanation: "Nesta voz passiva sintética, 'ilusões e sonhos' é o sujeito, logo o verbo deve ser 'Vendem-se'."
+            },
+            {
+                text: "No trecho: 'Fomos nós que escrevemos a carta.', a regra aplicada foi:",
+                options: [
+                    { label: "Concordância com o pronome relativo 'que'.", value: "a" },
+                    { label: "Concordância atrativa com o predicativo.", value: "b" },
+                    { label: "Concordância com o pronome reto 'nós', antecedente do 'que'.", value: "c" }
+                ],
+                correct: "c",
+                explanation: "Com o pronome 'que', o verbo concorda com o antecedente ('nós' = escrevemos)."
+            }
+        ];
+
+        let currentQ2Idx = 0;
+        let currentCaseIdx = 0;
+        let q2State = "checking";
+        let q3State = "checking";
+
+        function nextScreen(num) {
+            document.querySelectorAll('#game-container > div').forEach(div => div.classList.add('hidden'));
+            const target = document.getElementById('screen-' + num);
+            target.classList.remove('hidden');
+            if(num === 2) renderQ2();
+            if(num === 3) renderMeme();
+        }
+
+        function renderQ2() {
+            const q = questionsQ2[currentQ2Idx];
+            const html = `
+                <p class="text-xl mb-6 font-bold leading-relaxed">${q.text}</p>
+                <div class="space-y-4">
+                    ${q.options.map(opt => `
+                        <label class="block p-4 border-2 rounded-lg cursor-pointer hover:bg-red-50 transition border-gray-300">
+                            <input type="radio" name="q2_radio" value="${opt.value}" class="mr-3 scale-125 accent-red-800"> 
+                            <span class="text-lg">${opt.label}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('quiz-q2-content').innerHTML = html;
+            document.getElementById('q2-counter').innerText = `Questão ${currentQ2Idx + 1} de 5`;
+            document.getElementById('feedback-2').classList.add('hidden');
+            document.getElementById('btn-action-q2').innerText = "Verificar";
+            q2State = "checking";
+        }
+
+        function handleQ2Action() {
+            const btn = document.getElementById('btn-action-q2');
+            if (q2State === "next") {
+                currentQ2Idx++;
+                if (currentQ2Idx < questionsQ2.length) renderQ2();
+                else nextScreen(3);
+                return;
+            }
+            const selected = document.querySelector('input[name="q2_radio"]:checked');
+            if (!selected) return;
+            const feedback = document.getElementById('feedback-2');
+            feedback.classList.remove('hidden');
+            if (selected.value === questionsQ2[currentQ2Idx].correct) {
+                feedback.innerHTML = `<span class="text-green-800">✨ Correto!</span> <p class="text-sm font-normal mt-1">${questionsQ2[currentQ2Idx].explanation}</p>`;
+                feedback.className = "mt-4 p-4 rounded bg-green-100 border border-green-200 font-bold";
+                btn.innerText = (currentQ2Idx === questionsQ2.length - 1) ? "Próxima Etapa" : "Próxima";
+                q2State = "next";
+            } else {
+                feedback.innerHTML = `<span class="text-red-800">❌ Incorreto.</span> <p class="text-sm font-normal mt-1">${questionsQ2[currentQ2Idx].explanation}</p>`;
+                feedback.className = "mt-4 p-4 rounded bg-red-100 border border-red-200 font-bold";
+            }
+        }
+
+        function renderMeme() {
+            const c = casesQ3[currentCaseIdx];
+            const html = `
+                <div class="flex flex-col items-center">
+                    <div class="text-box w-full italic text-center text-xl shadow-inner">
+                        "${c.text}"
+                    </div>
+                    <div class="grid grid-cols-1 gap-3 w-full max-w-2xl mt-4">
+                        ${c.options.map(opt => `
+                            <label class="block p-4 border-2 rounded-lg cursor-pointer hover:bg-red-50 border-gray-300 transition">
+                                <input type="radio" name="case_radio" value="${opt.value}" class="mr-3 accent-red-800"> ${opt.label}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('meme-quiz-container').innerHTML = html;
+            document.getElementById('meme-counter').innerText = `Análise ${currentCaseIdx + 1} de 3`;
+            document.getElementById('feedback-3').classList.add('hidden');
+            document.getElementById('btn-action-q3').innerText = "Analisar";
+            q3State = "checking";
+        }
+
+        function handleMemeAction() {
+            const btn = document.getElementById('btn-action-q3');
+            if (q3State === "next") {
+                currentCaseIdx++;
+                if (currentCaseIdx < casesQ3.length) renderMeme();
+                else nextScreen(4);
+                return;
+            }
+            const selected = document.querySelector('input[name="case_radio"]:checked');
+            if (!selected) return;
+            const feedback = document.getElementById('feedback-3');
+            feedback.classList.remove('hidden');
+            if (selected.value === casesQ3[currentCaseIdx].correct) {
+                feedback.innerHTML = `Brilhante! ${casesQ3[currentCaseIdx].explanation}`;
+                feedback.className = "mt-4 p-4 rounded bg-green-100 text-green-800 font-bold border border-green-200";
+                btn.innerText = (currentCaseIdx === casesQ3.length - 1) ? "Revisão Final" : "Próxima";
+                q3State = "next";
+            } else {
+                feedback.innerHTML = `Atenção! ${casesQ3[currentCaseIdx].explanation}`;
+                feedback.className = "mt-4 p-4 rounded bg-red-100 text-red-800 font-bold border border-red-200";
+            }
+        }
+
+        let draggedId = null;
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) {
+            draggedId = ev.target.id;
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const node = document.getElementById(data);
+            const zone = document.getElementById('dropzone');
+            zone.innerHTML = node.innerText;
+            zone.setAttribute('data-val', node.innerText);
+            zone.style.borderStyle = "solid";
+            zone.style.backgroundColor = "white";
+        }
+
+        function checkDrag() {
+            const zone = document.getElementById('dropzone');
+            const feedback = document.getElementById('feedback-4');
+            const val = zone.getAttribute('data-val');
+            feedback.classList.remove('hidden');
+            if (val === 'contêm') {
+                feedback.innerText = "Excelente! 'Os mares e o céu' formam um sujeito composto plural, exigindo o acento circunflexo (contêm).";
+                feedback.className = "mt-8 text-center font-bold p-4 rounded bg-green-100 text-green-800 border border-green-200";
+                setTimeout(() => nextScreen(5), 3000);
+            } else if (!val) {
+                feedback.innerText = "Arraste uma opção para o espaço em branco.";
+                feedback.className = "mt-8 text-center font-bold p-4 rounded bg-yellow-100 text-yellow-800 border border-yellow-200";
+            } else {
+                feedback.innerText = "Reflita: o sujeito é composto e está no plural. Qual a forma correta do verbo conter?";
+                feedback.className = "mt-8 text-center font-bold p-4 rounded bg-red-100 text-red-800 border border-red-200";
+            }
+        }
+    </script>
+</body>
+</html>
